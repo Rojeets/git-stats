@@ -155,7 +155,7 @@ export default function Home() {
   if (!ready) return null;
 
   return (
-    <main className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="max-w-5xl mx-auto">
         <header className="mb-6 sm:mb-8 flex items-start justify-between gap-3">
           <div>
@@ -275,6 +275,6 @@ export default function Home() {
           </p>
         </footer>
       </div>
-    </main>
+    </div>
   );
 }
