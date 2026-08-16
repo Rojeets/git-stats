@@ -2,11 +2,15 @@
 
 Fetch public GitHub and GitLab contribution data and compute activity statistics — totals, current streak, longest streak, best day, and daily average. Works in Node.js 18+ (uses global `fetch`).
 
+Also ships presentational React components for rendering the data: `Heatmap` and `StatsSummary`.
+
 ## Install
 
 ```bash
 npm install @rojeets/git-stats
 ```
+
+Requires `react` and `react-dom` >= 17 (peer dependencies).
 
 ## Usage
 
@@ -30,6 +34,50 @@ Pass one username or both. A missing platform is returned as `null` in the resul
 ```js
 const { github, gitlab, merged, stats } = await getStats({ github: "octocat" });
 ```
+
+## UI components
+
+Presentational components that render the fetched data. They do not fetch data themselves — fetch server-side (the upstream fetch functions are blocked by CORS in the browser) and pass the result as props.
+
+```tsx
+import { getStats, Heatmap, StatsSummary } from "@rojeets/git-stats";
+
+// Server-side (route handler, server component, etc.)
+const { merged, stats } = await getStats({ github: "octocat" });
+
+// Client-side render
+<StatsSummary stats={stats} />
+<Heatmap days={merged} />
+```
+
+### `Heatmap({ days, colors? })`
+
+Renders a GitHub-style contribution grid (5 intensity levels, month and weekday labels, tooltips).
+
+| Prop | Type | Default |
+|------|------|---------|
+| `days` | `DayContribution[]` | — |
+| `colors` | `string[]` (5 levels) | GitHub green ramp `["#161b22", "#0a3d20", "#128c3e", "#2dd85e", "#44f278"]` |
+
+Pass `colors` to match your theme, e.g. `["#161b22", "#0a3d20", ...]` with your brand palette.
+
+### `StatsSummary({ stats })`
+
+Renders total contributions, daily average, current streak, longest streak, and best day.
+
+### Customization via CSS variables
+
+Components are unstyled apart from layout geometry. Colors come from CSS variables with light-mode GitHub fallbacks:
+
+| Variable | Used for | Default |
+|----------|----------|---------|
+| `--gs-text` | primary text | `#1f2328` |
+| `--gs-text-secondary` | secondary text, empty-state text | `#656d76` |
+| `--gs-bg` | card background | `#ffffff` |
+| `--gs-border` | card border | `#d0d7de` |
+| `--gs-label` | heatmap month/weekday labels | `#656d76` |
+
+Override at any scope (root, a wrapper, or inline via `style`) to adapt to dark themes.
 
 ## API
 

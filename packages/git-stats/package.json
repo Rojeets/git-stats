@@ -1,9 +1,10 @@
 {
   "name": "@rojeets/git-stats",
-  "version": "0.1.0",
-  "description": "Fetch public GitHub and GitLab contribution data and compute activity statistics (totals, streaks, best day).",
+  "version": "0.2.0",
+  "description": "Fetch public GitHub and GitLab contribution data and compute activity statistics (totals, streaks, best day). Includes presentational React UI components (heatmap, stats summary).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -30,6 +31,10 @@
   "engines": {
     "node": ">=18"
   },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rojeets/git-stats.git"
@@ -37,7 +42,11 @@
   "devDependencies": {
     "@types/jest": "^29",
     "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "jest": "^29",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "ts-jest": "^29",
     "typescript": "^5"
   }

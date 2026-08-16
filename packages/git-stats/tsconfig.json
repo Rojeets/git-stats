@@ -3,6 +3,7 @@
     "target": "ES2020",
     "module": "commonjs",
     "moduleResolution": "node",
+    "jsx": "react-jsx",
     "lib": ["ES2020", "DOM"],
     "declaration": true,
     "outDir": "dist",
@@ -12,6 +13,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["src/**/__tests__/**", "node_modules", "dist"]
 }

@@ -9,6 +9,7 @@ export { computeStats } from "./computeStats";
 export { mergeCalendars } from "./mergeCalendars";
 export { fetchGithubContributions, GitStatsError } from "./github";
 export { fetchGitlabContributions } from "./gitlab";
+export * from "./ui";
 
 export interface GetStatsOptions {
   /** GitHub username. Omit to skip GitHub data. */
