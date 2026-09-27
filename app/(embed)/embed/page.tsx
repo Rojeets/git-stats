@@ -7,6 +7,7 @@ import LanguageChart from "@/components/LanguageChart";
 import { DayContribution, Stats } from "@/lib/types";
 import { mergeCalendars } from "@/lib/mergeCalendars";
 import { computeStats } from "@/lib/computeStats";
+import dynamic from "next/dynamic";
 
 type CalOk = { days: DayContribution[] };
 type LangOk = { languages: Record<string, number> };

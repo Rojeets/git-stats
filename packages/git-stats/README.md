@@ -2,7 +2,7 @@
 
 Fetch public GitHub and GitLab contribution data and compute activity statistics — totals, current streak, longest streak, best day, and daily average. Works in Node.js 18+ (uses global `fetch`).
 
-Also ships presentational React components for rendering the data: `Heatmap` and `StatsSummary`.
+Also ships React components for rendering the data: `Heatmap`, `StatsSummary`, and ready-made `GitStats` / `GitStatsClient` widgets that fetch and render in one call.
 
 ## Install
 
@@ -37,33 +37,57 @@ const { github, gitlab, merged, stats } = await getStats({ github: "octocat" });
 
 ## UI components
 
-Presentational components that render the fetched data. They do not fetch data themselves — fetch server-side (the upstream fetch functions are blocked by CORS in the browser) and pass the result as props.
+### `GitStats` — server component (recommended)
+
+Fetches contribution data server-side and renders stats + heatmap + profile links in one call. Because the fetch runs on the server it is not blocked by CORS.
 
 ```tsx
-import { getStats, Heatmap, StatsSummary } from "@rojeets/git-stats";
+import { GitStats } from "@rojeets/git-stats";
 
-// Server-side (route handler, server component, etc.)
-const { merged, stats } = await getStats({ github: "octocat" });
-
-// Client-side render
-<StatsSummary stats={stats} />
-<Heatmap days={merged} />
+// In a Next.js App Router page / server component:
+<GitStats github="octocat" gitlab="someuser" />
 ```
 
-### `Heatmap({ days, colors? })`
+| Prop | Type | Description |
+|------|------|-------------|
+| `github` | `string?` | GitHub username (data + profile link). Omit to skip. |
+| `gitlab` | `string?` | GitLab username (data + profile link). Omit to skip. |
+| `colors` | `string[]` (5 levels) | Heatmap intensity colors. Defaults to GitHub green ramp. |
+| `showProfiles` | `boolean` | Show GitHub/GitLab links beside the heatmap. Default `true`. |
 
-Renders a GitHub-style contribution grid (5 intensity levels, month and weekday labels, tooltips).
+### `GitStatsClient` — client component (with your own endpoint)
 
-| Prop | Type | Default |
-|------|------|---------|
-| `days` | `DayContribution[]` | — |
-| `colors` | `string[]` (5 levels) | GitHub green ramp `["#161b22", "#0a3d20", "#128c3e", "#2dd85e", "#44f278"]` |
+For client-rendered trees. The browser cannot call GitHub/GitLab directly (CORS), so you provide an endpoint that returns `{ days, stats }`:
 
-Pass `colors` to match your theme, e.g. `["#161b22", "#0a3d20", ...]` with your brand palette.
+```tsx
+import { GitStatsClient } from "@rojeets/git-stats";
 
-### `StatsSummary({ stats })`
+<GitStatsClient endpoint="/api/git-stats" github="octocat" />
+```
 
-Renders total contributions, daily average, current streak, longest streak, and best day.
+Example server endpoint (Next.js route handler):
+
+```ts
+// app/api/git-stats/route.ts
+import { NextResponse } from "next/server";
+import { getStats } from "@rojeets/git-stats";
+
+export async function GET() {
+  const { merged, stats } = await getStats({ github: "octocat" });
+  return NextResponse.json({ days: merged, stats });
+}
+```
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `endpoint` | `string` | Server route returning `{ days, stats }`. Required. |
+| `github` / `gitlab` | `string?` | Usernames (profile links only — data comes from your endpoint). |
+| `colors` | `string[]` (5 levels) | Heatmap intensity colors. |
+| `showProfiles` | `boolean` | Show profile links. Default `true`. |
+
+### `Heatmap({ days, colors? })` and `StatsSummary({ stats })`
+
+Presentational building blocks, used internally by the widgets.
 
 ### Customization via CSS variables
 

@@ -1,6 +1,6 @@
 {
   "name": "@rojeets/git-stats",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Fetch public GitHub and GitLab contribution data and compute activity statistics (totals, streaks, best day). Includes presentational React UI components (heatmap, stats summary).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
